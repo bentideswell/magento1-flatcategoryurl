@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Fishpig_FlatCategoryURL>
-			<version>1.0.0.1</version>
+			<version>1.0.0.3</version>
 		</Fishpig_FlatCategoryURL>
 	</modules>
 	<global>
@@ -11,6 +11,11 @@
 				<class>Fishpig_FlatCategoryURL_Block</class>
 			</flatcategoryurl>
 		</blocks>
+		<helpers>
+			<flatcategoryurl>
+				<class>Fishpig_FlatCategoryURL_Helper</class>
+			</flatcategoryurl>
+		</helpers>
 		<models>
 			<catalog>
 				<rewrite>
@@ -18,7 +23,28 @@
 				</rewrite>
 			</catalog>
 		</models>
+    <resources>
+      <flatcategoryurl>
+        <setup>
+          <module>Fishpig_FlatCategoryURL</module>
+          <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+        </setup>
+      </flatcategoryurl>
+    </resources>
 	</global>
+	<adminhtml>
+  	<events>
+    	<category_prepare_ajax_response>
+      	<observers>
+        	<flatcategoryurl>
+          	<type>singleton</type>
+          	<class>Fishpig_FlatCategoryURL_Helper_Data</class>
+          	<method>categoryPrepareAjaxResponseObserver</method>
+        	</flatcategoryurl>
+      	</observers>
+    	</category_prepare_ajax_response>
+  	</events>
+	</adminhtml>
 	<admin>
 		<routers>
 			<adminhtml>
@@ -35,6 +61,7 @@
 			<settings>
 				<enabled>1</enabled>
 				<include_parent_path>0</include_parent_path>
+				<apply_globally>1</apply_globally>
 			</settings>
 		</flatcategoryurl>
 	</default>

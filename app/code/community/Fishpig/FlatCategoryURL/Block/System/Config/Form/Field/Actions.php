@@ -13,8 +13,7 @@ class Fishpig_FlatCategoryURL_Block_System_Config_Form_Field_Actions extends Mag
 	protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
 	{
 		$element->setScopeLabel('');
-		
-		
+
 		return $this->_getButtonHtml('Reindex Data', $this->getUrl('adminhtml/flatcategoryurl/reindex'))
 		. '&nbsp;' . $this->_getButtonHtml('Clean Data', $this->getUrl('adminhtml/flatcategoryurl/reindex'));
 	}

@@ -3,46 +3,7 @@
  *
  */
 class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
-{
-	/*
-	 * @var bool
-	 */
-	protected $isFlatCategoryUrlsEnabled;
-	
-	/*
-	 * @var bool
-	 */
-	protected $canIncludeParentPath;
-	
-	/*
-	 * Determine whether this feature is enabled
-	 *
-	 * @return bool
-	 */
-	protected function _isFlatCategoryUrlsEnabled()
-	{
-		if (is_null($this->isFlatCategoryUrlsEnabled)) {
-			$this->isFlatCategoryUrlsEnabled = Mage::getStoreConfigFlag('flatcategoryurl/settings/enabled');
-		}
-		
-		return $this->isFlatCategoryUrlsEnabled;
-	}
-	
-	/*
-	 * IF true, URLs like cat/subcat.html are converted to cat-subcat.html
-	 * Else cat/subcat.html is converted to subcat.html
-	 *
-	 * @return bool
-	 */
-	protected function canIncludeParentPath()
-	{
-		if (is_null($this->canIncludeParentPath)) {
-			$this->canIncludeParentPath = Mage::getStoreConfigFlag('flatcategoryurl/settings/include_parent_path');
-		}
-		
-		return $this->canIncludeParentPath;
-	}
-	
+{  
 	/**
 	 * Get unique category request path
 	 *
@@ -52,6 +13,12 @@ class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
 	 */
 	public function getCategoryRequestPath($category, $parentPath)
 	{
+  	$helper = Mage::helper('flatcategoryurl');
+  	
+  	if (!$helper->isEnabled() || !$helper->isAllowedCategory($category)) {
+    	return parent::getCategoryRequestPath($category, $parentPath);
+  	}
+
 		$storeId = $category->getStoreId();
 		$idPath  = $this->generatePath('id', null, $category);
 	
@@ -69,14 +36,14 @@ class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
 	
 		$categoryUrlSuffix = $this->getCategoryUrlSuffix($storeId);
 
-		if ($this->canIncludeParentPath()) {
+		if ($helper->canIncludeParentPath()) {
 			if (null === $parentPath) {
 				$parentPath = $this->getResource()->getCategoryParentPath($category);
 			}
 			elseif ($parentPath == '/') {
 				$parentPath = '';
 			}
-		
+
 			$parentPath = Mage::helper('catalog/category')->getCategoryUrlPath($parentPath, true, $storeId);
 		}
 		else {
@@ -113,7 +80,13 @@ class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
 	 */ 
 	protected function _refreshCategoryRewrites(Varien_Object $category, $parentPath = null, $refreshProducts = true)
 	{
-		return parent::_refreshCategoryRewrites($category, $parentPath, false);
+  	$helper = Mage::helper('flatcategoryurl');
+
+		if (!$helper->isEnabled() || !$helper->isAllowedCategory($category)) {
+  		return parent::_refreshCategoryRewrites($category, $parentPath, $refreshProducts);
+    }
+
+ 		return parent::_refreshCategoryRewrites($category, $parentPath, false);    
 	}
 
 	/**
@@ -124,7 +97,9 @@ class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
 	 */
 	protected function _refreshCategoryProductRewrites(Varien_Object $category)
 	{
-		if (!$this->_isFlatCategoryUrlsEnabled()) {
+  	$helper = Mage::helper('flatcategoryurl');
+  	
+		if (!$helper->isEnabled() || !$helper->isAllowedCategory($category)) {
 			return parent::_refreshCategoryProductRewrites($category);
 		}
 		
@@ -140,7 +115,9 @@ class Fishpig_FlatCategoryURL_Model_Catalog_Url extends Mage_Catalog_Model_Url
 	 */
 	protected function _refreshProductRewrite(Varien_Object $product, Varien_Object $category)
 	{
-		if (!$this->_isFlatCategoryUrlsEnabled()) {
+  	$helper = Mage::helper('flatcategoryurl');
+  	
+		if (!$helper->isEnabled() || !$helper->isAllowedCategory($category)) {
 			return parent::_refreshProductRewrite($product, $category);
 		}
 

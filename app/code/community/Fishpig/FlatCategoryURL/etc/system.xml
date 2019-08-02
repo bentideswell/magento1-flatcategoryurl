@@ -36,19 +36,32 @@
       				<comment><![CDATA[If Yes, cat/subcat.html is converted to cat-subcat.html<br/>If No,&nbsp; cat/subcat.html is converted to subcat.html]]></comment>
 							<frontend_type>select</frontend_type>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
-      				<sort_order>1</sort_order>
+      				<sort_order>6</sort_order>
       				<show_in_default>1</show_in_default>
       				<show_in_website>1</show_in_website>
       				<show_in_store>1</show_in_store>
+      				<depends><enabled>1</enabled></depends>
       			</include_parent_path>
+      			<apply_globally>
+      				<label>Apply to All Categories</label>
+      				<comment><![CDATA[If no, you will have to enable per category]]></comment>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+      				<sort_order>11</sort_order>
+      				<show_in_default>1</show_in_default>
+      				<show_in_website>1</show_in_website>
+      				<show_in_store>1</show_in_store>
+      				<depends><enabled>1</enabled></depends>
+      			</apply_globally>
       			<actions>
       				<label><![CDATA[&nbsp;]]></label>
 							<frontend_type>select</frontend_type>
 							<frontend_model>flatcategoryurl/system_config_form_field_actions</frontend_model>
-      				<sort_order>1</sort_order>
+      				<sort_order>999</sort_order>
       				<show_in_default>1</show_in_default>
       				<show_in_website>0</show_in_website>
       				<show_in_store>0</show_in_store>
+      				<depends><enabled>1</enabled></depends>
       			</actions>     			
       		</fields>            	
       	</settings>
